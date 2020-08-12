@@ -1,5 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 
 Vue.use(VueRouter);
 
@@ -26,7 +28,6 @@ const routes = [
       }
     ]
   },
-  //dashboard
   {
     path: "/",
     component: () =>
@@ -36,6 +37,7 @@ const routes = [
         path: "/",
         redirect: "/dashboard/analysis"
       },
+      //dashboard
       {
         path: "/dashboard",
         name: "dashboard",
@@ -50,54 +52,56 @@ const routes = [
               )
           }
         ]
-      }
-    ]
-  },
-  //form
-  {
-    path: "/form",
-    name: "form",
-    component: { render: h => h("router-view") },
-    children: [
-      {
-        path: "/form/basic-form",
-        name: "basicform",
-        component: () =>
-          import(/* webpackChunkName:"form" */ "../views/Forms/BasicForm.vue")
       },
+      //form
       {
-        path: "/form/step-form",
-        name: "stepform",
-        component: () =>
-          import(/* webpackChunkName: "form" */ "../views/Forms/StepForm"),
+        path: "/form",
+        name: "form",
+        component: { render: h => h("router-view") },
         children: [
           {
+            path: "/form/basic-form",
+            name: "basicform",
+            component: () =>
+              import(
+                /* webpackChunkName:"form" */ "../views/Forms/BasicForm.vue"
+              )
+          },
+          {
             path: "/form/step-form",
-            redirect: "/form/step-form/info"
-          },
-          {
-            path: "/form/step-from/info",
-            name: "info",
+            name: "stepform",
             component: () =>
-              import(
-                /* webpackChunkName: "form" */ "../views/Forms/StepForm/Step1.vue"
-              )
-          },
-          {
-            path: "/form/step-form/confirm",
-            name: "confirm",
-            component: () =>
-              import(
-                /* webpackChunkName: "form" */ "../views/Forms/StepForm/Step2.vue"
-              )
-          },
-          {
-            path: "/form/step-form/result",
-            name: "result",
-            component: () =>
-              import(
-                /* webpackChunkName: "form" */ "../views/Forms/StepForm/Step3.vue"
-              )
+              import(/* webpackChunkName: "form" */ "../views/Forms/StepForm"),
+            children: [
+              {
+                path: "/form/step-form",
+                redirect: "/form/step-form/info"
+              },
+              {
+                path: "/form/step-from/info",
+                name: "info",
+                component: () =>
+                  import(
+                    /* webpackChunkName: "form" */ "../views/Forms/StepForm/Step1.vue"
+                  )
+              },
+              {
+                path: "/form/step-form/confirm",
+                name: "confirm",
+                component: () =>
+                  import(
+                    /* webpackChunkName: "form" */ "../views/Forms/StepForm/Step2.vue"
+                  )
+              },
+              {
+                path: "/form/step-form/result",
+                name: "result",
+                component: () =>
+                  import(
+                    /* webpackChunkName: "form" */ "../views/Forms/StepForm/Step3.vue"
+                  )
+              }
+            ]
           }
         ]
       }
@@ -114,6 +118,15 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes
+});
+
+router.beforeEach((to, from, next) => {
+  NProgress.start();
+  next();
+});
+
+router.afterEach(() => {
+  NProgress.done();
 });
 
 export default router;
