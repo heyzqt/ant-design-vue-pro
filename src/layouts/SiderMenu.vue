@@ -1,6 +1,7 @@
 <template>
-  <div>
+  <div class="header-box">
     Sider Menu Layout
+    <div class="header-info">header info</div>
   </div>
 </template>
 
