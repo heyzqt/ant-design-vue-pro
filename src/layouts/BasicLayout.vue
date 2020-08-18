@@ -7,9 +7,10 @@
         v-model="collapsed"
         :trigger="null"
         collapsible
+        width="256px"
       >
-        <div class="logo">ant design pro</div>
-        <SiderMenu></SiderMenu>
+        <div class="logo">ant design pro navTheme = {{ navTheme }}</div>
+        <SiderMenu :theme="navTheme"></SiderMenu>
       </a-layout-sider>
       <a-layout>
         <a-layout-header style="background: #fff; padding: 0">
