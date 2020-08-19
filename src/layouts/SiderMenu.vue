@@ -1,25 +1,12 @@
 <template>
   <div style="width: 256px">
-    <a-button
-      type="primary"
-      style="margin-bottom: 16px"
-      @click="toggleCollapsed"
-    >
-      <a-icon :type="collapsed ? 'menu-unfold' : 'menu-fold'" />
-    </a-button>
-    <a-menu
-      :default-selected-keys="['1']"
-      :default-open-keys="['2']"
-      mode="inline"
-      :theme="$attrs.theme"
-      :inline-collapsed="collapsed"
-    >
+    <a-menu mode="inline" :theme="$attrs.theme" :inline-collapsed="collapsed">
       <template v-for="item in menuData">
-        <a-menu-item v-if="!item.children" :key="item.key">
-          <a-icon type="pie-chart" />
-          <span>{{ item.title }}</span>
+        <a-menu-item v-if="!item.children" :key="item.path">
+          <a-icon v-if="item.meta.icon" :type="item.meta.icon" />
+          <span>{{ item.meta.title }}</span>
         </a-menu-item>
-        <sub-menu v-else :key="item.key" :menu-info="item" />
+        <sub-menu v-else :key="item.path" :menu-info="item" />
       </template>
     </a-menu>
   </div>
@@ -33,7 +20,6 @@ export default {
   },
   data() {
     const menuData = this.getMenuData(this.$router.options.routes); //this.$router.options.routes获取当前的route配置
-    console.log(menuData);
     return {
       collapsed: false,
       menuData
@@ -44,15 +30,12 @@ export default {
       this.collapsed = !this.collapsed;
     },
     getMenuData(routes) {
-      debugger;
-      //规则只有带name属性的route才添加到菜单栏中
       const list = [];
       routes.forEach(item => {
         if (!item.hideInMenu) {
           if (item.name) {
-            let obj = {};
-            obj.key = item.name;
-            obj.title = item.meta.title;
+            const obj = { ...item };
+            delete obj.children;
             if (!item.hideChildrenMenu && item.children) {
               let children = this.getMenuData(item.children);
               if (children) {
@@ -64,7 +47,7 @@ export default {
             if (item.children) {
               let array = this.getMenuData(item.children);
               if (array) {
-                list.push(array);
+                list.push(...array);
               }
             }
           }

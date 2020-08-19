@@ -4,6 +4,11 @@ import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 
 Vue.use(VueRouter);
+//处理重复点击路由报错 Avoided redundant navigation to current location: "/dashboard".
+const originPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location) {
+  return originPush.call(this, location).catch(err => err);
+};
 
 const routes = [
   {
@@ -85,7 +90,7 @@ const routes = [
                 redirect: "/form/step-form/info"
               },
               {
-                path: "/form/step-from/info",
+                path: "/form/step-form/info",
                 name: "info",
                 component: () =>
                   import(

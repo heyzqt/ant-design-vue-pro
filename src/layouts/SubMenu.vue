@@ -1,14 +1,19 @@
 <template>
-  <a-sub-menu :key="menuInfo.key" v-bind="$props" v-on="$listeners">
-    <span slot="title">
-      <a-icon type="mail" /><span>{{ menuInfo.title }}</span>
+  <a-sub-menu :key="menuInfo.path" v-bind="$props" v-on="$listeners">
+    <span slot="title" @click="() => $router.push({ path: menuInfo.path })">
+      <a-icon v-if="menuInfo.meta.icon" :type="menuInfo.meta.icon" />
+      <span>{{ menuInfo.meta.title }}</span>
     </span>
     <template v-for="item in menuInfo.children">
-      <a-menu-item v-if="!item.children" :key="item.key">
-        <a-icon type="pie-chart" />
-        <span>{{ item.title }}</span>
+      <a-menu-item
+        v-if="!item.children"
+        :key="item.path"
+        @click="() => $router.push({ path: item.path })"
+      >
+        <a-icon v-if="item.meta.icon" :type="item.meta.icon" />
+        <span>{{ item.meta.title }}</span>
       </a-menu-item>
-      <sub-menu v-else :key="item.key" :menu-info="item" />
+      <sub-menu v-else :key="item.path" :menu-info="item" />
     </template>
   </a-sub-menu>
 </template>
