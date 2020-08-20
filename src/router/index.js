@@ -2,11 +2,19 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
+import findLast from "lodash/findLast";
+import { check, isLogin } from "../utils/auth";
+import { notification } from "ant-design-vue";
 
 Vue.use(VueRouter);
 //处理重复点击路由报错 Avoided redundant navigation to current location: "/dashboard".
 const originPush = VueRouter.prototype.push;
-VueRouter.prototype.push = function push(location) {
+VueRouter.prototype.push = function push(location, onResolve, onReject) {
+  if (onResolve || onReject) {
+    return originPush
+      .call(this, location, onResolve, onReject)
+      .catch(err => err);
+  }
   return originPush.call(this, location).catch(err => err);
 };
 
@@ -38,6 +46,7 @@ const routes = [
     path: "/",
     component: () =>
       import(/* webpackChunkName: "layout" */ "../layouts/BasicLayout.vue"),
+    meta: { authority: ["user", "admin"] },
     children: [
       {
         path: "/",
@@ -65,7 +74,7 @@ const routes = [
       {
         path: "/form",
         name: "form",
-        meta: { icon: "form", title: "表单" },
+        meta: { icon: "form", title: "表单", authority: ["admin"] },
         component: { render: h => h("router-view") },
         children: [
           {
@@ -120,6 +129,12 @@ const routes = [
     ]
   },
   {
+    path: "/403",
+    name: "Forbidden",
+    hideInMenu: true,
+    component: () => import("../views/403.vue")
+  },
+  {
     path: "*",
     name: "NotFount",
     hideInMenu: true,
@@ -136,6 +151,20 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   if (to.path != from.path) {
     NProgress.start();
+  }
+  //to.matched：一个数组，包含当前路由以及所有嵌套路由
+  const record = findLast(to.matched, item => item.meta.authority);
+  if (record && !check(record.meta.authority)) {
+    if (!isLogin() && to.path !== "/user/login") {
+      next("/user/isLogin");
+    } else if (to.path !== "/403") {
+      //判断条件是栈溢出处理
+      notification["error"]({
+        message: "访问失败了！",
+        description: "请联系管理员申请权限"
+      });
+      next({ path: "/403" });
+    }
   }
   next();
 });

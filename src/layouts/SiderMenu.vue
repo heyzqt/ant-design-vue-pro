@@ -14,6 +14,7 @@
 
 <script>
 import SubMenu from "./SubMenu.vue";
+import { check } from "../utils/auth";
 export default {
   components: {
     "sub-menu": SubMenu
@@ -31,7 +32,10 @@ export default {
     },
     getMenuData(routes) {
       const list = [];
-      routes.forEach(item => {
+      for (let item of routes) {
+        if (item.meta && item.meta.authority && !check(item.meta.authority)) {
+          break;
+        }
         if (!item.hideInMenu) {
           if (item.name) {
             const obj = { ...item };
@@ -52,7 +56,7 @@ export default {
             }
           }
         }
-      });
+      }
       return list;
     }
   }
