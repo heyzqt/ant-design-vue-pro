@@ -9,12 +9,12 @@
         collapsible
         width="256px"
       >
-        <div class="logo">ant design pro navTheme = {{ navTheme }}</div>
         <SiderMenu :theme="navTheme"></SiderMenu>
       </a-layout-sider>
       <a-layout>
         <a-layout-header style="background: #fff; padding: 0">
           <a-icon
+            v-auth="['admin']"
             class="menu-fold"
             :type="collapsed ? 'menu-unfold' : 'menu-fold'"
             @click="collapsed = !collapsed"
@@ -29,7 +29,9 @@
         </a-layout-footer>
       </a-layout>
     </a-layout>
-    <side-drawer></side-drawer>
+    <t-auth :authority="['admin']">
+      <side-drawer></side-drawer>
+    </t-auth>
   </div>
 </template>
 
