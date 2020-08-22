@@ -1,5 +1,5 @@
 export function getCurrnetAuthority() {
-  return ["user"];
+  return ["admin"];
 }
 
 export function check(authority) {
