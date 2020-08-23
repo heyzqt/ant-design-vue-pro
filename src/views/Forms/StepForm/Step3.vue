@@ -1,5 +1,5 @@
 <template>
-  <div>step 3</div>
+  <div>付款成功</div>
 </template>
 
 <script>
