@@ -28,7 +28,6 @@ Vue.use(Select);
 const IconFont = Icon.createFromIconfontCN({
   scriptUrl: "//at.alicdn.com/t/font_2022965_8eyvhxslfpp.js"
 });
-
 Vue.component("IconFont", IconFont);
 
 Vue.config.productionTip = false;
