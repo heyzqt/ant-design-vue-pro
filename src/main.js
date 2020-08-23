@@ -10,7 +10,8 @@ import {
   Drawer,
   Radio,
   Form,
-  Input
+  Input,
+  Select
 } from "ant-design-vue";
 import "ant-design-vue/dist/antd.less";
 
@@ -22,6 +23,7 @@ Vue.use(Drawer);
 Vue.use(Radio);
 Vue.use(Form);
 Vue.use(Input);
+Vue.use(Select);
 
 Vue.config.productionTip = false;
 
