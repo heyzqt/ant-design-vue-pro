@@ -1,6 +1,13 @@
 <template>
   <div>
     分析页
+    <div>
+      <div>
+        {{ $t("message.hello") }}
+      </div>
+      {{ $t("message")["app.dashboard.analysis.timelabel"] }}
+      <a-date-picker />
+    </div>
     <Chart :options="options" style="height:400px;"></Chart>
   </div>
 </template>
