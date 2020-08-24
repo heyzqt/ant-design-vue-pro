@@ -5,6 +5,15 @@
       <div>
         {{ $t("message.hello") }}
       </div>
+      <div>
+        {{ $t("message.name", ["heyzqt", "heyzqt1"]) }}
+      </div>
+      <div>
+        {{ $t("message.name", { "0": "heyzqt", "1": " heyzqt1" }) }}
+      </div>
+      <div>
+        {{ $tc("message.car", 2) }}
+      </div>
       {{ $t("message")["app.dashboard.analysis.timelabel"] }}
       <a-date-picker />
     </div>
